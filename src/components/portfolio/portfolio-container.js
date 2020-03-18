@@ -67,14 +67,14 @@ export default class PortfolioContainer extends Component {
       //JSX
 
       <div className="portfolio-items-wrapper">
-        <button className="btn" onClick={() => this.handleFilter("RPG")}>
-          RPG
+        <button className="btn" onClick={() => this.handleFilter("Education")}>
+          Education
         </button>
-        <button className="btn" onClick={() => this.handleFilter("Fighting")}>
-          Fighting
+        <button className="btn" onClick={() => this.handleFilter("Technology")}>
+          Technology
         </button>
-        <button className="btn" onClick={() => this.handleFilter("Platformer")}>
-          Platformer
+        <button className="btn" onClick={() => this.handleFilter("Example")}>
+          Example
         </button>
 
         {this.portfolioItems()}
