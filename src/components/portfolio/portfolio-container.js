@@ -36,7 +36,7 @@ export default class PortfolioContainer extends Component {
       .get("https://daneasimoneau.devcamp.space/portfolio/portfolio_items")
       .then(response => {
         // handle success
-        console.log("Response Items", response);
+        // console.log("Response Items", response);
         this.setState({
           data: response.data.portfolio_items
         });
@@ -49,7 +49,7 @@ export default class PortfolioContainer extends Component {
 
   portfolioItems() {
     return this.state.data.map(item => {
-      console.log("Portfolio Item", item);
+      //console.log("Portfolio Item", item);
       return <PortfolioItem key={item.id} item={item} />;
     });
   }
