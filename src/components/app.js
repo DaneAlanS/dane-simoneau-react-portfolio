@@ -80,8 +80,11 @@ export default class App extends Component {
 
   authorizedPages() {
     return [
-      <Route path="/blog" component={Blog} />,
-      <Route path="/portfolio-manager" component={PortfolioManager} />
+      <Route
+        key="portfolio-manager"
+        path="/portfolio-manager"
+        component={PortfolioManager}
+      />
     ];
   }
 
@@ -110,6 +113,7 @@ export default class App extends Component {
               />
 
               <Route path="/contact" component={Contact} />
+              <Route path="/blog" component={Blog} />
               {this.state.loggedInStatus === "LOGGED_IN"
                 ? this.authorizedPages()
                 : null}

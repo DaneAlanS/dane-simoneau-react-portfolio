@@ -23,6 +23,7 @@ export default class Login extends Component {
     });
   }
 
+  // HANDLES TEXT VALUES - NO IMAGES
   handleSubmit(event) {
     //start a session
     axios
