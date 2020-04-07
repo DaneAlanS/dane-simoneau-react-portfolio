@@ -24,11 +24,29 @@ export default class PortfolioForm extends Component {
     this.componentConfig = this.componentConfig.bind(this);
     this.djsConfig = this.djsConfig.bind(this);
     this.handleThumbDrop = this.handleThumbDrop.bind(this);
+    this.handleBannerDrop = this.handleBannerDrop.bind(this);
+    this.handleLogoDrop = this.handleLogoDrop.bind(this);
+
+    this.thumbRef = React.createRef();
+    this.bannerRef = React.createRef();
+    this.logoRef = React.createRef();
   }
 
   handleThumbDrop() {
     return {
       addedfile: file => this.setState({ thumb_image: file })
+    };
+  }
+
+  handleBannerDrop() {
+    return {
+      addedfile: file => this.setState({ banner_image: file })
+    };
+  }
+
+  handleLogoDrop() {
+    return {
+      addedfile: file => this.setState({ logo_image: file })
     };
   }
 
@@ -60,6 +78,14 @@ export default class PortfolioForm extends Component {
       formData.append("portfolio_item[thumb_image]", this.state.thumb_image);
     }
 
+    if (this.state.banner_image) {
+      formData.append("portfolio_item[banner_image]", this.state.banner_image);
+    }
+
+    if (this.state.logo_image) {
+      formData.append("portfolio_item[logo_image]", this.state.logo_image);
+    }
+
     return formData;
   }
 
@@ -79,6 +105,21 @@ export default class PortfolioForm extends Component {
     )
       .then(response => {
         this.props.handleSuccessfulFormSubmission(response.data.portfolio_item);
+
+        this.setState({
+          name: "",
+          description: "",
+          category: "eCommerce",
+          position: "",
+          url: "",
+          thumb_image: "",
+          banner_image: "",
+          logo: ""
+        });
+
+        [this.thumbRef, this.bannerRef, this.logoRef].forEach(ref => {
+          ref.current.dropzone.removeAllFiles();
+        });
       })
       .catch(error => {
         console.log("portfolio-manager submit error", error);
@@ -90,70 +131,91 @@ export default class PortfolioForm extends Component {
 
   render() {
     return (
-      <div>
-        <h1>PortfolioForm</h1>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            <input
-              type="text"
-              name="name"
-              placeholder="Portfolio Item Name"
-              value={this.state.name}
-              onChange={this.handleChange}
-            />
+      <form onSubmit={this.handleSubmit} className="portfolio-form-wrapper">
+        <div className="two-column">
+          <input
+            type="text"
+            name="name"
+            placeholder="Portfolio Item Name"
+            value={this.state.name}
+            onChange={this.handleChange}
+          />
 
-            <input
-              type="text"
-              name="url"
-              placeholder="URL"
-              value={this.state.url}
-              onChange={this.handleChange}
-            />
-          </div>
+          <input
+            type="text"
+            name="url"
+            placeholder="URL"
+            value={this.state.url}
+            onChange={this.handleChange}
+          />
+        </div>
 
-          <div>
-            <input
-              type="text"
-              name="position"
-              placeholder="Position"
-              value={this.state.position}
-              onChange={this.handleChange}
-            />
+        <div className="two-column">
+          <input
+            type="text"
+            name="position"
+            placeholder="Position"
+            value={this.state.position}
+            onChange={this.handleChange}
+          />
 
-            <select
-              name="category"
-              value={this.state.category}
-              onChange={this.handleChange}
-            >
-              <option value="Example">Example</option>
-              <option value="Education">Education</option>
-              <option value="Technology">Technology</option>
-            </select>
-          </div>
+          <select
+            className="select-element"
+            name="category"
+            value={this.state.category}
+            onChange={this.handleChange}
+          >
+            <option value="Example">Example</option>
+            <option value="Education">Education</option>
+            <option value="Technology">Technology</option>
+          </select>
+        </div>
 
-          <div>
-            <textarea
-              type="text"
-              name="description"
-              placeholder="Description"
-              value={this.state.description}
-              onChange={this.handleChange}
-            />
-          </div>
+        <div className="one-column">
+          <textarea
+            type="text"
+            name="description"
+            placeholder="Description"
+            value={this.state.description}
+            onChange={this.handleChange}
+          />
+        </div>
 
-          <div className="iamge-uploaders">
-            <DropzoneComponent
-              config={this.componentConfig()}
-              djsConfig={this.djsConfig()}
-              eventHandlers={this.handleThumbDrop()}
-            ></DropzoneComponent>
-          </div>
+        <div className="image-uploaders">
+          <DropzoneComponent
+            ref={this.thumbRef}
+            config={this.componentConfig()}
+            djsConfig={this.djsConfig()}
+            eventHandlers={this.handleThumbDrop()}
+          >
+            <div className="dz-message">Thumbnail Image</div>
+          </DropzoneComponent>
 
-          <div>
-            <button type="submit">Save</button>
-          </div>
-        </form>
-      </div>
+          <DropzoneComponent
+            ref={this.bannerRef}
+            config={this.componentConfig()}
+            djsConfig={this.djsConfig()}
+            eventHandlers={this.handleBannerDrop()}
+          >
+            <div className="dz-message">Banner Image</div>
+          </DropzoneComponent>
+
+          <DropzoneComponent
+            ref={this.logoRef}
+            config={this.componentConfig()}
+            djsConfig={this.djsConfig()}
+            eventHandlers={this.handleLogoDrop()}
+          >
+            <div className="dz-message">Logo Image</div>
+          </DropzoneComponent>
+        </div>
+
+        <div>
+          <button className="btn" type="submit">
+            Save
+          </button>
+        </div>
+      </form>
     );
   }
 }
